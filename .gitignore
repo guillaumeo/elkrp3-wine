@@ -8,6 +8,7 @@
 *.ldb
 *.bak
 *.exe
+*.EXE
 *.msi
 *.cab
 *.zip

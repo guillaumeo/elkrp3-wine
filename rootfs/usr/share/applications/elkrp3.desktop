@@ -2,7 +2,7 @@
 Type=Application
 Name=ElkRP3
 Comment=Launch ElkRP3 Programming Software
-Exec=wine "C:\\Program Files\\ElkRP\\ElkRP3.exe"
+Exec=/usr/local/bin/launch-elkrp
 Icon=applications-engineering
 Terminal=false
 Categories=Utility;

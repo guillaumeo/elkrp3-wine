@@ -37,21 +37,28 @@ RUN set -eux; \
         -o /usr/local/bin/winetricks; \
     chmod 0755 /usr/local/bin/winetricks
 
-COPY installer/*.exe /tmp/installer/
+COPY installer/ /tmp/installer/
 
 RUN set -eux; \
+    installer_exe="$(python3 -c 'import os,re,sys; d="/tmp/installer"; fs=[os.path.join(d,f) for f in os.listdir(d) if os.path.isfile(os.path.join(d,f)) and f.lower().endswith(".exe")]; ver=lambda s:[int(x) for x in (re.findall(r"\d+(?:\.\d+)+",s)[-1:].pop().split(".") if re.findall(r"\d+(?:\.\d+)+",s) else re.findall(r"\d+",s))]; fs.sort(key=lambda p:(ver(os.path.basename(p)),os.path.getmtime(p),p)); print(fs[-1] if fs else "")')"; \
+    if [ -z "${installer_exe}" ]; then \
+      echo "ERROR: No ElkRP .exe installer found in ./installer/" >&2; \
+      exit 1; \
+    fi; \
+    echo "Installing ElkRP from: ${installer_exe}"; \
     install -d -o 1000 -g 1000 /opt/wine32; \
-    su -s /bin/bash ubuntu -c ' \
+    INSTALLER_EXE="${installer_exe}" su -s /bin/bash ubuntu -c ' \
       set -eux; \
       export HOME=/home/ubuntu WINEARCH=win32 WINEPREFIX=/opt/wine32 WINEDEBUG=-all; \
       xvfb-run -a bash -euc '\'' \
         WINEDLLOVERRIDES="mscoree,mshtml=" wineboot -u && wineserver -w; \
         winetricks -q corefonts mfc42 jet40 mdac28 dotnet48 && wineserver -w; \
-        wine /tmp/installer/*.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- && wineserver -w; \
+        wine "${INSTALLER_EXE}" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- && wineserver -w; \
         wineserver -k || true \
       '\''; \
       rm -rf /home/ubuntu/.cache \
-    '
+    '; \
+    test -n "$(find "/opt/wine32/drive_c/Program Files" -maxdepth 2 -type f -iname 'ElkRP*.exe' ! -iname 'unins*' -print -quit)"
 
 RUN set -eux; \
     # Separate default RP database templates for runtime seeding and link C:\ProgramData\RP -> /database

@@ -5,7 +5,7 @@
       <action name="Execute"><command>xterm -fa Monospace -fs 10 -bg "#1e222a" -fg "#eceff4"</command></action>
     </item>
     <item label="ElkRP3">
-      <action name="Execute"><command>wine "C:\\Program Files\\ElkRP\\ElkRP3.exe"</command></action>
+      <action name="Execute"><command>/usr/local/bin/launch-elkrp</command></action>
     </item>
   </menu>
 </openbox_menu>

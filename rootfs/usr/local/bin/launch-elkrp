@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+elkrp_exe="$(find "${WINEPREFIX:-/opt/wine32}/drive_c/Program Files" -maxdepth 2 -type f -iname 'ElkRP*.exe' ! -iname 'unins*' | sort -V | tail -n 1)"
+if [ -z "${elkrp_exe}" ]; then
+  echo "ERROR: Could not find installed ElkRP executable under ${WINEPREFIX:-/opt/wine32}" >&2
+  exit 1
+fi
+
+exec wine "${elkrp_exe}" "$@"

@@ -17,6 +17,6 @@ fi
 openbox &
 tint2 -c /etc/xdg/tint2/tint2rc &
 x11vnc -display "${DISPLAY}" -unixsock /tmp/vnc.sock -rfbport 0 -forever -shared -nopw -quiet &
-wine "C:\\Program Files\\ElkRP\\ElkRP3.exe" >/dev/null 2>&1 &
+/usr/local/bin/launch-elkrp >/dev/null 2>&1 &
 
 exec websockify --web /usr/share/novnc --unix-target=/tmp/vnc.sock 3000

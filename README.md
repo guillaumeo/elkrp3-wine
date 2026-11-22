@@ -4,7 +4,7 @@ Minimal multi-stage Ubuntu 24.04 (`noble`) + 32-bit Wine + Openbox/tint2/noVNC c
 
 ## Directory Layout
 - `Dockerfile` & `rootfs/` — Multi-stage build definition and static X11/Openbox/tint2/noVNC overlay.
-- `docker-compose.yml` — Service definition mounting `./database` and exposing internal port `3000/tcp` on `nginx-proxy-manager_default`.
+- `docker-compose.yml` — Service definition mounting `./database` and publishing port `3000/tcp` on `127.0.0.1:3000` (override via `ELKRP3_BIND` or attach to your reverse-proxy network).
 - `./database/` *(gitignored)* — Mounted at `/database` (`C:\ProgramData\RP\`): holds `ElkAccts2.mdb`, `Ops2.mdb`, `Controls2.mdb`, and `SOps2.mdw`.
 - `./installer/` *(gitignored, build-time only)* — Holds the `ElkRP-Full-install-*.exe` binary used during `docker compose build`.
 
@@ -27,7 +27,7 @@ docker compose up -d --build
 *(The initial build takes ~5–8 minutes while `.NET 4.8`, `Jet 4.0`, and `ElkRP3` install inside the temporary builder stage.)*
 
 ### 3. Open the Web UI
-Expose `elkrp3:3000` (HTTP + WebSockets enabled, or publish `3000` locally in `docker-compose.yml`) and open the web VNC desktop. **ElkRP3** launches automatically on startup, with **Terminal** (`xterm`) and **ElkRP3** icons on the top `tint2` bar.
+Open `http://localhost:3000` in your browser (or place `elkrp3:3000` behind an HTTPS + WebSockets reverse proxy—note VNC has no password by default, so do not expose port `3000` directly to untrusted networks). **ElkRP3** launches automatically on startup, with **Terminal** (`xterm`) and **ElkRP3** icons on the top `tint2` bar.
 
 ---
 

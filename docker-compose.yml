@@ -6,11 +6,11 @@ services:
     init: true
     user: "1000:1000"
     environment:
-      - TZ=America/Los_Angeles
+      - TZ=${TZ:-UTC}
+    ports:
+      - "${ELKRP3_BIND:-127.0.0.1}:3000:3000"
     volumes:
       - ./database:/database
-    networks:
-      - nginx-proxy-manager_default
     shm_size: "1gb"
     logging:
       driver: json-file
@@ -18,7 +18,3 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: "no"
-
-networks:
-  nginx-proxy-manager_default:
-    external: true

@@ -1,5 +1,7 @@
 # ElkRP3 Wine Container
 
+This shows how to setup and run elkrp3 in a limited linux container offering a web interface (vnc) to avoid keeping a Windows machine just for running this program once in a while. Just add the official installer and your existing database file (optional) and you are ready to go.
+
 Minimal multi-stage Ubuntu 24.04 (`noble`) + 32-bit Wine + Openbox/tint2/noVNC container with `.NET 4.8`, `Jet 4.0`, and **ElkRP 3.x** (`ElkRP3.exe`) pre-installed inside the image.
 
 ## Directory Layout
@@ -28,18 +30,3 @@ docker compose up -d --build
 
 ### 3. Open the Web UI
 Open `http://localhost:3000` in your browser (or place `elkrp3:3000` behind an HTTPS + WebSockets reverse proxy—note VNC has no password by default, so do not expose port `3000` directly to untrusted networks). **ElkRP3** launches automatically on startup, with **Terminal** (`xterm`) and **ElkRP3** icons on the top `tint2` bar.
-
----
-
-## Connecting to `M1EZ8` via `ser2net` (TCP `2101`)
-Use **ElkRP3's native Non-Secure Network mode**, which speaks raw RP frames directly over Winsock TCP to `ser2net`:
-
-1. Temporarily **disable the `ElkM1` integration in Home Assistant** (`Settings` -> `Devices & Services` -> `ElkM1` -> `⋮` -> `Disable`), since `ser2net` on port `2101` allows `max-connections: 1`.
-2. Open your account in **ElkRP3** -> **Account Details**:
-   - **Network Adapter:** `M1XEP`
-   - **System URL/IP:** `MY_ELKM1_IP_OR_NAME`
-   - **Check:** **`Connect Non-Secure`**
-   - **Port:** `2101`
-   - Click **Save**.
-3. Click **Connect -> Network**.
-4. When finished, disconnect in ElkRP3 and **re-enable `ElkM1` in Home Assistant**.

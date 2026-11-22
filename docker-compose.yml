@@ -1,0 +1,24 @@
+services:
+  elkrp3:
+    build: .
+    image: local/elkrp3-wine:noble
+    container_name: elkrp3
+    init: true
+    user: "1000:1000"
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./database:/database
+    networks:
+      - nginx-proxy-manager_default
+    shm_size: "1gb"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: "no"
+
+networks:
+  nginx-proxy-manager_default:
+    external: true

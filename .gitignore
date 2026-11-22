@@ -1,0 +1,15 @@
+/database/
+/installer/
+*.mdb
+*.mdw
+*._db
+*.ldb
+*.bak
+*.exe
+*.msi
+*.cab
+*.zip
+*.7z
+*.tar*
+*.log
+ElkRPLog*.txt

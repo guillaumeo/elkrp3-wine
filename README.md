@@ -1,0 +1,45 @@
+# ElkRP3 Wine Container
+
+Minimal multi-stage Ubuntu 24.04 (`noble`) + 32-bit Wine + Openbox/tint2/noVNC container with `.NET 4.8`, `Jet 4.0`, and **ElkRP 3.x** (`ElkRP3.exe`) pre-installed inside the image.
+
+## Directory Layout
+- `Dockerfile` & `rootfs/` — Multi-stage build definition and static X11/Openbox/tint2/noVNC overlay.
+- `docker-compose.yml` — Service definition mounting `./database` and exposing internal port `3000/tcp` on `nginx-proxy-manager_default`.
+- `./database/` *(gitignored)* — Mounted at `/database` (`C:\ProgramData\RP\`): holds `ElkAccts2.mdb`, `Ops2.mdb`, `Controls2.mdb`, and `SOps2.mdw`.
+- `./installer/` *(gitignored, build-time only)* — Holds the `ElkRP-Full-install-*.exe` binary used during `docker compose build`.
+
+---
+
+## Initial Setup (Fresh Host)
+
+### 1. Provide the installer and database
+Create the local directories under `elkrp3/` (as UID `1000` so Docker does not create them as `root`):
+```bash
+mkdir -p database installer
+```
+1. **Installer:** Copy your ElkRP full installer (e.g. `ElkRP-Full-install-3.0.11.exe`) into `./installer/`.
+2. **Database *(optional, if migrating from Windows)*:** On Windows, close ElkRP, open `%ProgramData%\RP`, and copy **`ElkAccts2.mdb`** (plus **`Ops2.mdb`** if you customized operator logins) into `./database/`. *(If left empty, default database files are seeded automatically on first start.)*
+
+### 2. Build and start the container
+```bash
+docker compose up -d --build
+```
+*(The initial build takes ~5–8 minutes while `.NET 4.8`, `Jet 4.0`, and `ElkRP3` install inside the temporary builder stage.)*
+
+### 3. Open the Web UI
+Expose `elkrp3:3000` (HTTP + WebSockets enabled, or publish `3000` locally in `docker-compose.yml`) and open the web VNC desktop. **ElkRP3** launches automatically on startup, with **Terminal** (`xterm`) and **ElkRP3** icons on the top `tint2` bar.
+
+---
+
+## Connecting to `M1EZ8` via `ser2net` (TCP `2101`)
+Use **ElkRP3's native Non-Secure Network mode**, which speaks raw RP frames directly over Winsock TCP to `ser2net`:
+
+1. Temporarily **disable the `ElkM1` integration in Home Assistant** (`Settings` -> `Devices & Services` -> `ElkM1` -> `⋮` -> `Disable`), since `ser2net` on port `2101` allows `max-connections: 1`.
+2. Open your account in **ElkRP3** -> **Account Details**:
+   - **Network Adapter:** `M1XEP`
+   - **System URL/IP:** `MY_ELKM1_IP_OR_NAME`
+   - **Check:** **`Connect Non-Secure`**
+   - **Port:** `2101`
+   - Click **Save**.
+3. Click **Connect -> Network**.
+4. When finished, disconnect in ElkRP3 and **re-enable `ElkM1` in Home Assistant**.

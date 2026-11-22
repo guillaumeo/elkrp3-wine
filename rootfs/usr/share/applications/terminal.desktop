@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal
+Comment=Open Terminal
+Exec=xterm -fa Monospace -fs 10 -bg "#1e222a" -fg "#eceff4"
+Icon=utilities-terminal
+Terminal=false
+Categories=System;

@@ -1,5 +1,7 @@
-/database/
-/installer/
+/database/*
+!/database/README.md
+/installer/*
+!/installer/README.md
 *.mdb
 *.mdw
 *._db

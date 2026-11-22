@@ -14,13 +14,9 @@ Minimal multi-stage Ubuntu 24.04 (`noble`) + 32-bit Wine + Openbox/tint2/noVNC c
 
 ## Initial Setup (Fresh Host)
 
-### 1. Provide the installer and database
-Create the local directories under `elkrp3/` (as UID `1000` so Docker does not create them as `root`):
-```bash
-mkdir -p database installer
-```
+### 1. Provide the installer (and optional database)
 1. **Installer:** Copy your ElkRP full installer (e.g. `ElkRP-Full-install-3.0.11.exe`) into `./installer/`.
-2. **Database *(optional, if migrating from Windows)*:** On Windows, close ElkRP, open `%ProgramData%\RP`, and copy **`ElkAccts2.mdb`** (plus **`Ops2.mdb`** if you customized operator logins) into `./database/`. *(If left empty, default database files are seeded automatically on first start.)*
+2. **Database *(optional, if migrating from Windows)*:** On Windows, close ElkRP, open `%ProgramData%\RP`, and copy **`ElkAccts2.mdb`** (plus **`Ops2.mdb`** if you customized operator logins) into `./database/`. *(If left as-is, default database files are seeded automatically on first start.)*
 
 ### 2. Build and start the container
 ```bash

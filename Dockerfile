@@ -40,7 +40,7 @@ RUN set -eux; \
 COPY installer/ /tmp/installer/
 
 RUN set -eux; \
-    installer_exe="$(ls -1v /tmp/installer/*.[eE][xX][eE] 2>/dev/null | tail -n 1 || true)"; \
+    installer_exe="$(ls -1v /tmp/installer/ElkRP*.[eE][xX][eE] 2>/dev/null | tail -n 1 || true)"; \
     if [ -z "${installer_exe}" ]; then \
       echo "ERROR: No ElkRP .exe installer found in ./installer/" >&2; \
       exit 1; \

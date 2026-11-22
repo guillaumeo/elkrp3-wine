@@ -40,7 +40,7 @@ RUN set -eux; \
 COPY installer/ /tmp/installer/
 
 RUN set -eux; \
-    installer_exe="$(python3 -c 'import os,re,sys; d="/tmp/installer"; fs=[os.path.join(d,f) for f in os.listdir(d) if os.path.isfile(os.path.join(d,f)) and f.lower().endswith(".exe")]; ver=lambda s:[int(x) for x in (re.findall(r"\d+(?:\.\d+)+",s)[-1:].pop().split(".") if re.findall(r"\d+(?:\.\d+)+",s) else re.findall(r"\d+",s))]; fs.sort(key=lambda p:(ver(os.path.basename(p)),os.path.getmtime(p),p)); print(fs[-1] if fs else "")')"; \
+    installer_exe="$(ls -1v /tmp/installer/*.[eE][xX][eE] 2>/dev/null | tail -n 1 || true)"; \
     if [ -z "${installer_exe}" ]; then \
       echo "ERROR: No ElkRP .exe installer found in ./installer/" >&2; \
       exit 1; \
